@@ -4,8 +4,6 @@ kyverno:
 
 minio:
 
-  image:
-
   rootUser: # TBD
   rootPassword: # TBD
 
