@@ -1,0 +1,82 @@
+
+components:
+
+  - name: minio
+    vars:
+      rootUser: TBD
+      rootPassword: TBD
+      storage:
+        driveSize: TBD
+        drivesPerNode: 1
+        replicas: 4
+        pools: 1
+      ingressName: TBD
+    modules:
+      - name: main
+        source: kdp2
+        chart:
+          path: ./charts/kdp-minio/5.2.0/
+        values: |
+          {{- if dig "kyverno" "namespace" "" .Context }}
+          kyverno:
+            namespace: {{ .Context.kyverno.namespace }}
+            {{- end }}
+          minio:
+            rootUser: {{ .Vars.rootUser }}
+            rootPassword: {{ .Vars.rootPassword }}
+            clusterIssuer: {{ .Context.certificateIssuer.internal }}
+            tls:
+              enabled: true
+            persistence:
+              storageClass: {{ .Context.storageClass.data }}
+              size: {{ .Vars.storage.driveSize }}
+            drivesPerNode: {{ .Vars.storage.drivesPerNode }}
+            replicas: {{ .Vars.storage.replicas }}
+            pools: {{ .Vars.storage.pools }}
+            ingress:
+              hosts:
+                - {{ required ".Vars.ingressName is required" .Vars.ingressName }}.{{ .Context.ingress.urlRoot }}
+            consoleIngress:
+              annotations:
+                cert-manager.io/cluster-issuer: {{ .Context.certificateIssuer.public }}
+              hosts:
+                - {{ .Vars.ingressName}}-console.{{ .Context.ingress.urlRoot }}
+              tls:
+                - secretName: {{ .Meta.deployment.name }}-console-tls
+                  hosts:
+                    - {{ .Vars.ingressName}}-console.{{ .Context.ingress.urlRoot }}
+            ingressExt:
+              enabled: {{ ne .Context.certificateIssuer.public .Context.certificateIssuer.internal }}
+              clusterIssuer: {{ .Context.certificateIssuer.public }}
+              host: {{ .Vars.ingressName }}-ext.{{ .Context.ingress.urlRoot }}
+            {{- if and .Vars.topology .Context.minio }}
+            {{- if .Context.minio.topologies }}
+            {{- $topology := get .Context.minio.topologies .Vars.topology }}
+            topologySpreadConstraints:
+              - maxSkew: 1
+                whenUnsatisfiable: DoNotSchedule
+                topologyKey: "{{ $topology.topologyKey }}"
+                #nodeAffinityPolicy: Honor
+                labelSelector:
+                  matchLabels:
+                    app: minio
+                #matchLabelKeys:
+                #  - controller-revision-hash
+            affinity:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: "{{ $topology.topologyKey }}"
+                          operator: In
+                          values:
+                            {{- toYaml $topology.zones | nindent 24 }}
+            {{- end }}
+            {{- end }}
+            {{- if .Vars.ldap }}
+            {{- toYaml (get .Context.minio.ldapSettings  .Vars.ldap) | nindent 10 }}
+            {{- end }}
+            users: []
+          
+          
+          
