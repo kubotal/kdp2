@@ -7,8 +7,8 @@ components:
       rootPassword: TBD
       storage:
         driveSize: TBD
+        replicas: TBD
         drivesPerNode: 1
-        replicas: 4
         pools: 1
       ingressName: TBD
     modules:
@@ -32,6 +32,7 @@ components:
               size: {{ .Vars.storage.driveSize }}
             drivesPerNode: {{ .Vars.storage.drivesPerNode }}
             replicas: {{ .Vars.storage.replicas }}
+            mode: {{ if ne .Vars.storage.replicas 1 }}distributed{{else}}standalone{{end}}
             pools: {{ .Vars.storage.pools }}
             ingress:
               hosts:

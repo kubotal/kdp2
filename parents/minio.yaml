@@ -1,6 +1,22 @@
 
 deployments:
 
+  - name: minio-small-1
+    abstract: true
+    parent: minio-small
+    vars:
+      storage:
+        driveSize: "10G"
+        replicas: 1
+
+  - name: minio-small-4
+    abstract: true
+    parent: minio-small
+    vars:
+      storage:
+        driveSize: "5G"
+        replicas: 4
+
   - name: minio-small
     abstract: true
     component: minio
@@ -8,10 +24,7 @@ deployments:
       rootUser: minio
       rootPassword: minio123
       storage:
-        driveSize: "5G"
-        # Take default value of the component
-        #drivesPerNode: 1
-        replicas: 4
+        drivesPerNode: 1
         pools: 1
       ingressExt:
         enabled: true
