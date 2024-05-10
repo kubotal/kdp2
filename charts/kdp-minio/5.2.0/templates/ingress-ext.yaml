@@ -30,7 +30,7 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
   {{ end }}
   labels:
-    app: minioext
+    app: minio-ext
 spec:
   ingressClassName: nginx
   rules:
@@ -48,6 +48,6 @@ spec:
   tls:
     - hosts:
         - {{ .Values.minio.ingressExt.host }}
-      secretName: minioext-tls
+      secretName: minio-ext-tls
   {{ end }}
 {{ end }}
