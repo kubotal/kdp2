@@ -8,7 +8,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: minioext
+  name: minio-ext
   namespace: {{ .Release.Namespace  }}
   annotations:
   {{ if and .Values.minio.clusterIssuer .Values.minio.ingressExt.clusterIssuer }}
