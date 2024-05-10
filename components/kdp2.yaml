@@ -1,5 +1,0 @@
-sources:
-
-  - name: kdp2
-    create: false
-    kind: GitRepository

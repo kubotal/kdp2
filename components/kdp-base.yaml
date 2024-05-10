@@ -1,5 +1,27 @@
+sources:
+
+  - name: kdp2
+    create: false
+    kind: GitRepository
+
+  - name: cnpg
+    kind: HelmRepository
+    template: helmRepository
+    config:
+      url: https://cloudnative-pg.github.io/charts
+
 
 components:
+
+  - name: cnpg
+    createNamespace: true
+    modules:
+      - name: main
+        source: cnpg
+        chart:
+          name: cloudnative-pg
+          version: 0.21.2
+
 
   - name: minio
     vars:
