@@ -5,9 +5,9 @@ components:
     createNamespace: true
     vars:
       admin:
-        user: TBD
-        password: TBD
-      ingressInfix: TBD
+        user: # TBD
+        password: # TBD
+      ingressInfix: # TBD
     modules:
       - name: main
         source: kdp2
@@ -30,4 +30,32 @@ components:
               email: {{ .Vars.admin.user }}
               password: {{ .Vars.admin.password }}
 
-
+  - name: hive-metastore
+    vars:
+      s3access:
+        url: # TBD
+        accessKey:  # TBD. Leave blank if secret is created outside
+        secretKey:  # TBD
+    modules:
+      - name: main
+        source: kdp2
+        chart:
+          path: ./charts/kdp-hive-metastore/0.1.0
+        values: |
+          s3Secret:
+            accessKey: {{ .Vars.s3access.accessKey }}
+            secretKey: {{ .Vars.s3access.secretKey }}
+          hive-metastore:
+            s3:
+              url: {{ .Vars.s3access.url }} 
+              accessKey:
+                secretName: kdp-hive-metastore-s3-secret
+                propertyName: accessKey
+              secretKey:
+                secretName: kdp-hive-metastore-s3-secret
+                propertyName: secretKey
+            networkPolicies:
+              enabled: {{ .Context.networkPoliciesSupport }}
+          pgcluster:
+            storage:
+              storageClass: {{ .Context.storageClass.data }}
