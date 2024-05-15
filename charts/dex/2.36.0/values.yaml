@@ -48,9 +48,9 @@ staticClients:
 #    # This is NOT the secret itself, but the name of a k8s secret with a value 'clientSecret'
 #    secretName: web-app-secret
 
-rawStaticClients:
-  - name: "Web app"
-    id: web-app
-    secret: xxxxxx
-    redirectURIs:
-      - 'https://web-app.example.com/callback'
+rawStaticClients: []
+#  - name: "Web app"
+#    id: web-app
+#    secret: xxxxxx
+#    redirectURIs:
+#      - 'https://web-app.example.com/callback'
