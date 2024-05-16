@@ -60,20 +60,20 @@ components:
             pools: {{ .Vars.storage.pools }}
             ingress:
               hosts:
-                - {{ required ".Vars.ingressName is required" .Vars.ingressName }}.{{ .Context.ingress.urlRoot }}
+                - {{ required ".Vars.ingressName is required" .Vars.ingressName }}.{{ .Context.ingress.url }}
             consoleIngress:
               annotations:
                 cert-manager.io/cluster-issuer: {{ .Context.certificateIssuer.public }}
               hosts:
-                - {{ .Vars.ingressName}}-console.{{ .Context.ingress.urlRoot }}
+                - {{ .Vars.ingressName}}-console.{{ .Context.ingress.url }}
               tls:
                 - secretName: {{ .Meta.deployment.name }}-console-tls
                   hosts:
-                    - {{ .Vars.ingressName}}-console.{{ .Context.ingress.urlRoot }}
+                    - {{ .Vars.ingressName}}-console.{{ .Context.ingress.url }}
             ingressExt:
               enabled: {{ ne .Context.certificateIssuer.public .Context.certificateIssuer.internal }}
               clusterIssuer: {{ .Context.certificateIssuer.public }}
-              host: {{ .Vars.ingressName }}-ext.{{ .Context.ingress.urlRoot }}
+              host: {{ .Vars.ingressName }}-ext.{{ .Context.ingress.url }}
             {{- if and .Vars.topology .Context.minio }}
             {{- if .Context.minio.topologies }}
             {{- $topology := get .Context.minio.topologies .Vars.topology }}

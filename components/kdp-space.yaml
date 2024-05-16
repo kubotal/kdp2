@@ -24,7 +24,7 @@ components:
             size: 500M
           ingress:
             clusterIssuer: {{ .Context.certificateIssuer.public }}
-            host:  pgadmin.{{ .Vars.ingressInfix}}.{{ .Context.ingress.urlRoot }}
+            host:  pgadmin.{{ .Vars.ingressInfix}}.{{ .Context.ingress.url }}
           admin:
             value:
               email: {{ .Vars.admin.user }}
