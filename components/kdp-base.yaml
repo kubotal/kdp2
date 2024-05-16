@@ -35,6 +35,8 @@ components:
       ingressName: TBD
     modules:
       - name: main
+        config:
+          timeout:  "5m"
         source: kdp2
         chart:
           path: ./charts/kdp-minio/5.2.0/

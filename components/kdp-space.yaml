@@ -39,6 +39,8 @@ components:
     modules:
       - name: main
         source: kdp2
+        config:
+          timeout:  "5m"
         chart:
           path: ./charts/kdp-hive-metastore/0.1.0
         values: |
