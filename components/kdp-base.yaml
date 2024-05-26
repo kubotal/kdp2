@@ -44,7 +44,7 @@ components:
           {{- if dig "kyverno" "namespace" "" .Context }}
           kyverno:
             namespace: {{ .Context.kyverno.namespace }}
-            {{- end }}
+          {{- end }}
           minio:
             rootUser: {{ .Vars.rootUser }}
             rootPassword: {{ .Vars.rootPassword }}
